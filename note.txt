@@ -1,0 +1,60 @@
+conda create --name chunker python=3.12
+conda activate chunker
+
+git clone https://github.com/segment-any-text/wtpsplit
+
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+
+pip install wtpsplit
+
+### Join
+https://huggingface.co/settings/tokens
+    to get token, create one and copy it
+
+# for thatlq1812 token
+huggingface-cli login
+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
+
+
+(chunker) D:\OJT\Segment-Text>huggingface-cli login
+
+    _|    _|  _|    _|    _|_|_|    _|_|_|  _|_|_|  _|      _|    _|_|_|      _|_|_|_|    _|_|      _|_|_|  _|_|_|_|
+    _|    _|  _|    _|  _|        _|          _|    _|_|    _|  _|            _|        _|    _|  _|        _|
+    _|_|_|_|  _|    _|  _|  _|_|  _|  _|_|    _|    _|  _|  _|  _|  _|_|      _|_|_|    _|_|_|_|  _|        _|_|_|
+    _|    _|  _|    _|  _|    _|  _|    _|    _|    _|    _|_|  _|    _|      _|        _|    _|  _|        _|
+    _|    _|    _|_|      _|_|_|    _|_|_|  _|_|_|  _|      _|    _|_|_|      _|        _|    _|    _|_|_|  _|_|_|_|
+
+    A token is already saved on your machine. Run `huggingface-cli whoami` to get more information or `huggingface-cli logout` if you want to log out.
+    Setting a new token will erase the existing one.
+    To log in, `huggingface_hub` requires a token generated from https://huggingface.co/settings/tokens .
+    Token can be pasted using 'Right-Click'.
+    Enter your token (input will not be visible):
+    Add token as git credential? (Y/n) y
+    Token is valid (permission: fineGrained).
+    The token `chunker` has been saved to C:\Users\fxlqt\.cache\huggingface\stored_tokens
+    Your token has been saved in your configured git credential helpers (manager).
+    Your token has been saved to C:\Users\fxlqt\.cache\huggingface\token
+    Login successful.
+    The current active token is: `chunker`
+
+
+split(text_or_texts, threshold: float = None, stride=64, block_size: int = 512, batch_size=32, pad_last_batch: bool = False, weighting: Literal['uniform', 'hat'] = 'uniform', remove_whitespace_before_inference: bool = False, outer_batch_size=1000, paragraph_threshold: float = 0.5, strip_whitespace: bool = False, do_paragraph_segmentation: bool = False, split_on_input_newlines: bool = True, treat_newline_as_space=None, verbose: bool = False) method of wtpsplit.SaT instance
+
+"""
+Tham số	Mặc định	Ý nghĩa
+    text_or_texts	Bắt buộc	Văn bản hoặc danh sách văn bản cần phân đoạn
+    threshold	None	Ngưỡng để xác định điểm cắt câu (nếu None, dùng mặc định của mô hình)
+    stride	64	Số ký tự trùng lặp giữa các đoạn để cải thiện phân đoạn
+    block_size	512	Số ký tự tối đa cho mỗi khối đầu vào của mô hình
+    batch_size	32	Số câu xử lý cùng lúc trong một batch
+    pad_last_batch	False	Có thêm padding vào batch cuối cùng hay không
+    weighting	'uniform'	Cách tính trọng số khi phân đoạn ('uniform' hoặc 'hat')
+    remove_whitespace_before_inference	False	Xóa khoảng trắng trước khi đưa vào mô hình
+    outer_batch_size	1000	Số văn bản xử lý đồng thời trong batch ngoài
+    paragraph_threshold	0.5	Ngưỡng để phân đoạn theo đoạn văn (khi do_paragraph_segmentation=True)
+    strip_whitespace	False	Xóa khoảng trắng sau khi phân đoạn
+    do_paragraph_segmentation	False	Có phân đoạn theo đoạn văn hay không
+    split_on_input_newlines	True	Có cắt câu dựa trên dòng mới (\n) trong input hay không
+    treat_newline_as_space	None	Nếu True, coi dòng mới (\n) như khoảng trắng
+    verbose	False	Hiển thị log khi chạy
+"""
