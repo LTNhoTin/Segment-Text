@@ -12,18 +12,29 @@ pip install -r requirements.txt
 ```
 
 ## Run
-Run FastAPI server at port 8000.
+Run pytorch model server at port 8000.
 ```bash
-uvicorn main:app --host 0.0.0.0 --port 8000
+uvicorn server_base:app --host 0.0.0.0 --port 8000
 ```
 
-## Testing
-Use this command to test the FastAPI server. Can change the text to demo.txtt.
+Run onnx model server at port 8001.
 ```bash
-curl -X 'POST' 'http://127.0.0.1:8000/chunk-text' \
+uvicorn server_onnx:app --host 0.0.0.0 --port 8001
+```
+## Testing
+Use this command to test the FastAPI server. Can change the text to demo.txt. 
+```bash
+curl -X 'POST' 'http://127.0.0.1:8000/chunk-text/' \
      -H 'Content-Type: application/json' \
      -d '{"text": "Đây là một đoạn văn mẫu gửi đến server FastAPI."}'
 ```
+
+## Export to ONNX
+
+```bash
+python export_to_onnx_sat.py --model_name_or_path=segment-any-text/sat-12l-sm --output_dir=output_onnx_exports/sat-12l-sm
+```
+
 
 ## Note
 
