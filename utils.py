@@ -16,12 +16,14 @@ def chunking(model: SaT, sub_text: list[str], number: int = 128) -> list[str]:
         list[str]: A list of chunked text strings.
     """
 
+    # Use the SaT model to split the text
     sub_text = model.split(sub_text,
                            block_size=256,
                            strip_whitespace=True,
                            verbose=False)
     sub_text = list(chain.from_iterable(list(sub_text)))
 
+    # Group the text into chunks based on the specified number of tokens
     new_sub_text = []
     chunk = ""
 
