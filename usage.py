@@ -1,13 +1,12 @@
 from wtpsplit import SaT
 from multiprocessing import freeze_support
 import torch
-
-
+from utils import device
 
 if __name__ == "__main__":
     freeze_support()
-    device = "cuda" if torch.cuda.is_available() else "cpu"
     model = SaT("sat-3l")
+    device = device()
     model.to(device)
 
     # Test segmentation

@@ -2,11 +2,14 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from wtpsplit import SaT
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from utils import chunking
+from utils import *
 import timeit
 
+device = device()               # Check if CUDA is available and return appropriate device. Need the same device as the model
+provider = "CUDAExecutionProvider" if device == "cuda" else "CPUExecutionProvider"
+
 model = SaT("sat-12l-sm",
-            ort_providers=["CUDAExecutionProvider", "CPUExecutionProvider"])
+            ort_providers=provider)
 
 text_splitter = RecursiveCharacterTextSplitter(  # split theo doạn văn
         chunk_size=500,

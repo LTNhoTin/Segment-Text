@@ -1,4 +1,14 @@
 # Segment-Text
+
+> Please press ⭐ button and/or cite papers if you feel helpful.
+
+<div align="center">
+
+[![python](https://img.shields.io/badge/-Python_3.10.11-blue?logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![pytorch](https://img.shields.io/badge/Torch_2.0.1-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org/get-started/locally/)
+[![cuda](https://img.shields.io/badge/-CUDA_11.8-green?logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit-archive)
+</div>
+
 ## Installation
 
 Create a new conda environment.

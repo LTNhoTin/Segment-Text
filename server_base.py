@@ -2,11 +2,12 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from wtpsplit import SaT
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from utils import chunking
+from utils import *
 import timeit
 
+device = device()
 model = SaT("sat-12l-sm")
-model.half().to("cuda")
+model.half().to(device)
 text_splitter = RecursiveCharacterTextSplitter(  # split theo doạn văn
         chunk_size=500,
         chunk_overlap=0,

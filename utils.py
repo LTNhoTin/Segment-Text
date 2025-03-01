@@ -1,5 +1,6 @@
 from itertools import chain
 from wtpsplit import SaT
+import torch
 
 
 def chunking(model: SaT, sub_text: list[str], number: int = 128) -> list[str]:
@@ -21,3 +22,12 @@ def chunking(model: SaT, sub_text: list[str], number: int = 128) -> list[str]:
                                verbose=False)
     new_sub_text = list(chain.from_iterable(list(new_sub_text)))
     return list(new_sub_text)
+
+def device():
+    """
+    Check if CUDA is available and return appropriate device.
+
+    Returns:
+        str: 'cuda' if available, otherwise 'cpu'
+    """
+    return 'cuda' if torch.cuda.is_available() else 'cpu'
