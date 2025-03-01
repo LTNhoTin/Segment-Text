@@ -17,6 +17,7 @@ def chunking(model: SaT, sub_text: list[str], number: int = 128) -> list[str]:
 
     new_sub_text = model.split(sub_text,
                                block_size=number,
+                               strip_whitespace=True,
                                verbose=False)
     new_sub_text = list(chain.from_iterable(list(new_sub_text)))
     return list(new_sub_text)
