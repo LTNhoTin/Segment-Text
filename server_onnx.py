@@ -31,7 +31,7 @@ async def process_text(data: TextData):
         sub_text = chunking(
             model,
             sub_text,
-            50)
+            60)
         end_time = timeit.default_timer()
         execution_time = end_time - start_time
 
