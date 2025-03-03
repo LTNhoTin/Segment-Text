@@ -23,20 +23,22 @@ def chunking(model: SaT, sub_text: list[str], number: int = 128) -> list[str]:
                            verbose=False)
     sub_text = list(chain.from_iterable(list(sub_text)))
 
+    # print(sub_text)
+
     # Group the text into chunks based on the specified number of tokens
     new_sub_text = []
     chunk = ""
 
     for text in sub_text:
-        check_chunk = chunk + text
+        check_chunk = chunk + " " + text
         n_token = len(check_chunk.split())
         if n_token > number:
             new_sub_text.append(chunk)
             chunk = text
         else:
-            chunk += text
+            chunk = chunk + " " + text
 
-    if len(new_sub_text) == 0:
+    if len(chunk.split()) > 0:
         new_sub_text.append(chunk)
 
     return new_sub_text
