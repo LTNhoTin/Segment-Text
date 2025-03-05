@@ -37,6 +37,13 @@ Use this command to test the FastAPI server. Can change the text to demo.txt.
 curl -X 'POST' 'http://127.0.0.1:8000/chunk-text/' \
      -H 'Content-Type: application/json' \
      -d '{"text": "Đây là một đoạn văn mẫu gửi đến server FastAPI."}'
+
+curl -X POST "http://127.0.0.1:8000/chunk-text/" -H "Content-Type: application/json" -d "{\"text\": \"Đây là một đoạn văn mẫu gửi đến server FastAPI.\"}"
+
+curl -X POST "http://127.0.0.1:8000/chunk-text/" ^
+     -H "Content-Type: application/json" ^
+     --data-binary "@demo.txt"
+
 ```
 
 ## Export to ONNX
