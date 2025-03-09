@@ -2,11 +2,15 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from wtpsplit import SaT
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+import torch
 from utils import *
 import timeit
 
 device = device()
-model = SaT("sat-12l-sm")
+model = SaT("sat-12l-sm",
+            from_pretrained_kwargs = {
+                "torch_dtype": torch.float32,
+            })
 model.half().to(device)
 text_splitter = RecursiveCharacterTextSplitter(  # split theo doạn văn
         chunk_size=500,
