@@ -22,8 +22,6 @@ def chunking_by_tokenizer(sub_texts: list,
     for ids in id_sub_texts:
         check_chunk = id_chunk + ids
         n_id = len(check_chunk)
-        print(check_chunk)
-        print(n_id)
         if n_id > max_length:
             new_sub_texts.append(tokenizer.decode(id_chunk))
             id_chunk = ids
