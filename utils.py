@@ -2,6 +2,39 @@ from itertools import chain
 from wtpsplit import SaT
 import torch
 
+deepseek_tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1-Distill-Llama-8B")
+
+
+def chunking_by_tokenizer(sub_texts: list,
+                          max_length: int,
+                          model: SaT,
+                          tokenizer=deepseek_tokenizer):
+    # Use the SaT model to split the text
+    sub_texts = model.split(sub_texts,
+                                block_size=128,
+                                strip_whitespace=True,
+                                verbose=False)
+    sub_texts = list(chain.from_iterable(list(sub_texts)))
+    id_sub_texts = [tokenizer.encode(text, add_special_tokens=False) for text in sub_texts]
+
+    new_sub_texts = []
+    id_chunk = []
+    for ids in id_sub_texts:
+        check_chunk = id_chunk + ids
+        n_id = len(check_chunk)
+        print(check_chunk)
+        print(n_id)
+        if n_id > max_length:
+            new_sub_texts.append(tokenizer.decode(id_chunk))
+            id_chunk = ids
+        else:
+            id_chunk += ids
+
+    if len(id_chunk) > 0:
+        new_sub_texts.append(tokenizer.decode(id_chunk))
+
+    return new_sub_texts
+
 
 def chunking(model: SaT, sub_text: list[str], number: int = 128) -> list[str]:
     """
@@ -42,6 +75,7 @@ def chunking(model: SaT, sub_text: list[str], number: int = 128) -> list[str]:
         new_sub_text.append(chunk)
 
     return new_sub_text
+
 
 def device() -> str:
     """
