@@ -1,6 +1,7 @@
 from itertools import chain
 from wtpsplit import SaT
 import torch
+from transformers import AutoTokenizer
 
 deepseek_tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1-Distill-Llama-8B")
 
@@ -9,6 +10,7 @@ def chunking_by_tokenizer(sub_texts: list,
                           max_length: int,
                           model: SaT,
                           tokenizer=deepseek_tokenizer):
+
     # Use the SaT model to split the text
     sub_texts = model.split(sub_texts,
                                 block_size=128,
