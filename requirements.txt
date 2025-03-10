@@ -5,3 +5,4 @@ langchain~=0.3.19
 fastapi[standard]
 onnx
 onnxruntime
+onnxruntime-gpu
