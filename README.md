@@ -19,6 +19,9 @@ conda activate chunker
 Install the required packages.
 ```bash
 pip install -r requirements.txt
+pip install onnxruntime
+# package for onnxruntime gpu support
+pip install onnxruntime-gpu==1.21.0
 ```
 
 ## Run
