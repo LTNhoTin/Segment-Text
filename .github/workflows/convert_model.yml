@@ -5,10 +5,15 @@ on:
   push:
     paths:
       - 'convert/export_to_onnx_sat.py'
+      - '.github/workflows/convert-model.yml'
 
 jobs:
   convert-model:
     runs-on: ubuntu-latest
+
+    env:
+      MODEL_BASE: segment-any-text/sat
+      MODEL_VERSION: 12l-sm 
 
     steps:
       - name: Checkout code
@@ -27,9 +32,10 @@ jobs:
 
       - name: Convert PyTorch to ONNX
         run: |
+          MODEL_NAME="${{ env.MODEL_BASE }}-${{ env.MODEL_VERSION }}"
           python convert/export_to_onnx_sat.py \
-            --model_name_or_path segment-any-text/sat-12l-sm \
-            --output_dir models/sat-12l-sm \
+            --model_name_or_path $MODEL_NAME \
+            --output_dir models/$MODEL_NAME \
             --device cpu
 
       - name: Upload ONNX artifact
