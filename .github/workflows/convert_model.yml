@@ -1,11 +1,11 @@
 name: Convert PyTorch Model to ONNX
 
 on:
-  workflow_dispatch:  # Kích hoạt thủ công từ GitHub Actions tab
+  workflow_dispatch:  # Cho phép chạy thủ công từ GitHub Actions tab
   push:
     paths:
-      - 'convert/export_to_onnx_sat.py'
-      - '.github/workflows/convert-model.yml'
+      - 'convert/export_to_onnx_sat.py'  # Khi script chuyển đổi được cập nhật
+      - '.github/workflows/convert-model.yml'  # Khi file workflow này được cập nhật
 
 jobs:
   convert-model:
@@ -13,7 +13,7 @@ jobs:
 
     env:
       MODEL_BASE: segment-any-text/sat
-      MODEL_VERSION: 12l-sm 
+      MODEL_VERSION: 12l-sm  # Có thể thay đổi version linh hoạt
 
     steps:
       - name: Checkout code
@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: model-onnx
-          path: models/sat-12l-sm/model.onnx
+          path: models/${{ env.MODEL_BASE }}-${{ env.MODEL_VERSION }}/model.onnx
