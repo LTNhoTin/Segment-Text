@@ -3,34 +3,37 @@ name: Convert PyTorch Model to ONNX
 on:
   push:
     paths:
-      - 'models/**'
-      - 'convert/**'
+      - 'models/**/*.pt'
+      - 'convert/export_to_onnx_sat.py'
 
 jobs:
   convert-model:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install onnx onnxruntime torch numpy
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install torch onnx onnxruntime transformers huggingface_hub numpy
 
-    - name: Convert Model to ONNX
-      run: |
-        python convert/export_to_onnx_sat.py --model_name_or_path models/sat-12l-sm --output model.onnx
+      - name: Convert PyTorch Model to ONNX
+        run: |
+          python convert/export_to_onnx_sat.py \
+            --model_name_or_path models/sat-12l-sm \
+            --output_dir models/sat-12l-sm \
+            --device cpu
 
-    - name: Upload ONNX model artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: model-onnx
-        path: model.onnx
+      - name: Upload ONNX model artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-onnx
+          path: models/sat-12l-sm/model.onnx
