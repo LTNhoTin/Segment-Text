@@ -58,7 +58,23 @@ curl -X POST "http://127.0.0.1:8000/chunk-text/" ^
 python convert/export_to_onnx_sat.py --model_name_or_path=segment-any-text/sat-12l-sm --output_dir=models/sat-12l-sm
 ```
 
+## Run ONNX model
 
+```bash
+docker run --gpus all --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
+    -v $(pwd)/models:/models nvcr.io/nvidia/tritonserver:25.02-py3 \
+    tritonserver --model-repository=/models
+```
+## Perf-Analyser
+- Run this command in the terminal to analyze the performance of the model.
+```bash
+perf_analyzer -m sat-12l-sm -b 1 -u localhost:8000 \
+  --shape input_ids:1,512 attention_mask:1,512 \
+  --input-data zero \
+  --concurrency-range 1:4
+
+```
+- Because this model not support multiple batch size, so we need to change the batch size to 1. " -b 1 "
 ## Note
 
 Các tham số trong phương thức `split` của SaT
