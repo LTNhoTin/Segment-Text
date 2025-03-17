@@ -125,3 +125,11 @@ cython_debug/
 
 # PyCharm
 .idea/
+
+# Model
+*.onnx
+*.pkl
+*.pth
+*.h5
+*.ckpt
+*.pt

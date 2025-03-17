@@ -5,7 +5,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from utils import *
 import timeit
 
-device = device()  # Check if CUDA is available and return appropriate device. Need the same device as the model
+device = get_device()  # Check if CUDA is available and return appropriate device. Need the same device as the model
 provider = "CUDAExecutionProvider" if device == "cuda" else "CPUExecutionProvider"
 
 model = SaT("sat-12l-sm",

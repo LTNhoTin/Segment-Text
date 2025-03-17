@@ -6,7 +6,7 @@ import torch
 from utils import *
 import timeit
 
-device = device()
+device = get_device()
 model = SaT("sat-12l-sm",
             from_pretrained_kwargs = {
                 "torch_dtype": torch.float32,
