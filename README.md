@@ -20,6 +20,7 @@ Install the required packages.
 ```bash
 pip install -r requirements.txt
 pip install onnxruntime==1.21.0
+pip install onnx
 # package for onnxruntime gpu support
 pip install onnxruntime-gpu==1.21.0
 ```
@@ -54,7 +55,7 @@ curl -X POST "http://127.0.0.1:8000/chunk-text/" ^
 ## Export to ONNX
 
 ```bash
-python export_to_onnx_sat.py --model_name_or_path=segment-any-text/sat-12l-sm --output_dir=models/sat-12l-sm
+python convert/export_to_onnx_sat.py --model_name_or_path=segment-any-text/sat-12l-sm --output_dir=models/sat-12l-sm
 ```
 
 
