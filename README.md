@@ -67,10 +67,24 @@ docker run --gpus all --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
 ## Perf-Analyser
 - Run this command in the terminal to analyze the performance of the model.
 ```bash
-perf_analyzer -m sat-12l-sm -b 1 -u localhost:8000 \
-  --shape input_ids:1,512 attention_mask:1,512 \
-  --input-data zero \
-  --concurrency-range 1:4
+
+cd /home/thatlq1812/projects/OJT/Segment-Text/perf_results
+
+perf_analyzer -m sat-12l-sm -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:4 > result_sat_12l_sm.txt
+perf_analyzer -m sat-12l-sm-fp32 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:4 > result_sat_12l_sm_fp32.txt
+perf_analyzer -m sat-12l-sm-fp16 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:4 > result_sat_12l_sm_fp16.txt
+perf_analyzer -m sat-12l-sm-fp32-opt1 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:4 > result_sat_12l_sm_fp32_opt1.txt
+perf_analyzer -m sat-12l-sm-fp16-opt1 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:4 > result_sat_12l_sm_fp16_opt1.txt
+perf_analyzer -m sat-12l-sm-fp32-opt2 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:4 > result_sat_12l_sm_fp32_opt2.txt
+perf_analyzer -m sat-12l-sm-fp16-opt2 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:4 > result_sat_12l_sm_fp16_opt2.txt
+
+perf_analyzer -m sat-12l-sm -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:8 > result_sat_12l_sm_8.txt
+perf_analyzer -m sat-12l-sm-fp32 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:8 > result_sat_12l_sm_fp32_8.txt
+perf_analyzer -m sat-12l-sm-fp16 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:8 > result_sat_12l_sm_fp16_8.txt
+perf_analyzer -m sat-12l-sm-fp32-opt1 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:8 > result_sat_12l_sm_fp32_opt1_8.txt
+perf_analyzer -m sat-12l-sm-fp16-opt1 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:8 > result_sat_12l_sm_fp16_opt1_8.txt
+perf_analyzer -m sat-12l-sm-fp32-opt2 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:8 > result_sat_12l_sm_fp32_opt2_8.txt
+perf_analyzer -m sat-12l-sm-fp16-opt2 -b 1 -u localhost:8000 --shape input_ids:1,512 attention_mask:1,512 --input-data zero --concurrency-range 1:8 > result_sat_12l_sm_fp16_opt2_8.txt
 
 ```
 - Because this model not support multiple batch size, so we need to change the batch size to 1. " -b 1 "
