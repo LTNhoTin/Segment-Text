@@ -1,18 +1,17 @@
-name: Convert PyTorch Model to ONNX and Upload to HF Hub
+name: Convert PyTorch Model to ONNX and Upload to HF Dataset
 
 on:
   push:
     branches:
-      - main
+      - main  # Chạy workflow khi có push lên nhánh `main`
 
 jobs:
   convert-model:
     runs-on: ubuntu-latest
 
     env:
-      MODEL_BASE: segment-any-text/sat
-      MODEL_VERSION: 12l-sm
-      HF_REPO: segment-any-text/${{ env.MODEL_BASE }}-${{ env.MODEL_VERSION }}  # Repo trên HF
+      HF_DATASET_REPO: nhotin/segment-text  # Repo dataset trên Hugging Face
+      MODEL_NAME: sat-12l-sm  # Tên model
 
     steps:
       - name: Checkout code
@@ -31,26 +30,28 @@ jobs:
 
       - name: Convert PyTorch to ONNX
         run: |
-          MODEL_NAME="${{ env.MODEL_BASE }}-${{ env.MODEL_VERSION }}"
           python convert/export_to_onnx_sat.py \
-            --model_name_or_path $MODEL_NAME \
-            --output_dir models/$MODEL_NAME \
+            --model_name_or_path segment-any-text/${{ env.MODEL_NAME }} \
+            --output_dir models/${{ env.MODEL_NAME }} \
             --device cpu
 
-      - name: Upload ONNX model to Hugging Face Hub
+      - name: Upload ONNX model to Hugging Face Dataset
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}  # Token Hugging Face
         run: |
           pip install huggingface_hub
-          MODEL_NAME="${{ env.MODEL_BASE }}-${{ env.MODEL_VERSION }}"
+
+          echo "Đăng nhập vào Hugging Face Hub..."
           huggingface-cli login --token $HF_TOKEN
           
-          # Tạo repo trên HF nếu chưa có
-          python -c "from huggingface_hub import HfApi; HfApi().create_repo('${{ env.HF_REPO }}', exist_ok=True)"
-          
-          # Đẩy model lên HF
+          echo "Kiểm tra và tạo dataset nếu chưa có..."
+          python -c "from huggingface_hub import HfApi; HfApi().create_repo('${{ env.HF_DATASET_REPO }}', repo_type='dataset', exist_ok=True)"
+
+          echo "Đẩy model lên Hugging Face Dataset..."
           huggingface-cli upload \
-            ${{ env.HF_REPO }} \
-            models/$MODEL_NAME/model.onnx \
-            --repo-type model \
+            "${{ env.HF_DATASET_REPO }}" \
+            "models/${{ env.MODEL_NAME }}/model.onnx" \
+            --repo-type dataset \
             --token $HF_TOKEN
+
+          echo "Model đã được upload thành công lên Dataset: https://huggingface.co/datasets/${{ env.HF_DATASET_REPO }}"
