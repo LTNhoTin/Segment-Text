@@ -1,4 +1,4 @@
-name: Convert PyTorch Model to ONNX
+name: Convert PyTorch Model to ONNX and Upload to HF Hub
 
 on:
   push:
@@ -11,7 +11,8 @@ jobs:
 
     env:
       MODEL_BASE: segment-any-text/sat
-      MODEL_VERSION: 12l-sm 
+      MODEL_VERSION: 12l-sm
+      HF_REPO: segment-any-text/${{ env.MODEL_BASE }}-${{ env.MODEL_VERSION }}  # Repo trên HF
 
     steps:
       - name: Checkout code
@@ -36,8 +37,20 @@ jobs:
             --output_dir models/$MODEL_NAME \
             --device cpu
 
-      - name: Upload ONNX artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: model-onnx
-          path: models/${{ env.MODEL_BASE }}-${{ env.MODEL_VERSION }}/model.onnx
+      - name: Upload ONNX model to Hugging Face Hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}  # Token Hugging Face
+        run: |
+          pip install huggingface_hub
+          MODEL_NAME="${{ env.MODEL_BASE }}-${{ env.MODEL_VERSION }}"
+          huggingface-cli login --token $HF_TOKEN
+          
+          # Tạo repo trên HF nếu chưa có
+          python -c "from huggingface_hub import HfApi; HfApi().create_repo('${{ env.HF_REPO }}', exist_ok=True)"
+          
+          # Đẩy model lên HF
+          huggingface-cli upload \
+            ${{ env.HF_REPO }} \
+            models/$MODEL_NAME/model.onnx \
+            --repo-type model \
+            --token $HF_TOKEN
