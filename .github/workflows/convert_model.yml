@@ -1,4 +1,4 @@
-name: Convert PyTorch Model to ONNX and Upload to HF Dataset
+name: Convert PyTorch Model to ONNX and Upload to HF, then Run on Kaggle
 
 on:
   push:
@@ -55,3 +55,19 @@ jobs:
             --token $HF_TOKEN
 
           echo "Model đã được upload thành công lên Dataset: https://huggingface.co/datasets/${{ env.HF_DATASET_REPO }}"
+
+      - name: Setup Kaggle API
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          mkdir -p ~/.kaggle
+          echo "{\"username\":\"$KAGGLE_USERNAME\",\"key\":\"$KAGGLE_KEY\"}" > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+          echo "Kaggle API đã được cấu hình thành công!"
+
+      - name: Push Kaggle Notebook
+        run: kaggle kernels push -p convert
+
+      - name: Run Kaggle Notebook with GPU T4
+        run: kaggle kernels start --kernel your_kaggle_username/convert-onnx-to-trt
