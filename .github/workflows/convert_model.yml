@@ -69,6 +69,11 @@ jobs:
       - name: Install Kaggle CLI
         run: pip install kaggle
 
+      - name: Verify Kaggle Notebook Files
+        run: |
+          ls -lah convert/
+          cat convert/kernel-metadata.json
+
       - name: Push Kaggle Notebook
         run: kaggle kernels push -p convert
 

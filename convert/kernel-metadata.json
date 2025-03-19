@@ -1,0 +1,11 @@
+{
+    "id": "nhotin/convert-onnx-to-trt",
+    "title": "Convert ONNX to TensorRT",
+    "code_file": "convert-onnx-to-trt.ipynb",
+    "language": "python",
+    "kernel_type": "notebook",
+    "is_private": true,
+    "enable_gpu": true,
+    "enable_internet": true,
+    "accelerator": "GPU_T4x2"
+  }
