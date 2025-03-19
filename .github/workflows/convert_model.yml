@@ -66,6 +66,9 @@ jobs:
           chmod 600 ~/.kaggle/kaggle.json
           echo "Kaggle API đã được cấu hình thành công!"
 
+      - name: Install Kaggle CLI
+        run: pip install kaggle
+
       - name: Push Kaggle Notebook
         run: kaggle kernels push -p convert
 
