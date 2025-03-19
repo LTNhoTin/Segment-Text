@@ -69,13 +69,19 @@ jobs:
       - name: Install Kaggle CLI
         run: pip install kaggle
 
-      - name: Verify Kaggle Notebook Files
+      - name: Run Kaggle Notebook via API
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: |
-          ls -lah convert/
-          cat convert/kernel-metadata.json
+          curl -X POST -H "Content-Type: application/json" \
+          -u $KAGGLE_USERNAME:$KAGGLE_KEY \
+          https://www.kaggle.com/api/v1/kernels/nhotin/convert-onnx-to-tensorrt/forkAndRun
 
-      - name: Push Kaggle Notebook
-        run: kaggle kernels push -p convert
-
-      - name: Run Kaggle Notebook with GPU T4
-        run: kaggle kernels start --kernel your_kaggle_username/convert-onnx-to-trt
+      - name: Check Kaggle Notebook Status
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          curl -u $KAGGLE_USERNAME:$KAGGLE_KEY \
+          https://www.kaggle.com/api/v1/kernels/status/nhotin/convert-onnx-to-tensorrt
