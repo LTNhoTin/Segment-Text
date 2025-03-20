@@ -6,7 +6,7 @@ on:
       - main  # Chạy workflow khi có push lên nhánh `main`
 
 jobs:
-  convert-model:
+  convert-and-upload:
     runs-on: ubuntu-latest
 
     env:
@@ -56,6 +56,11 @@ jobs:
 
           echo "Model đã được upload thành công lên Dataset: https://huggingface.co/datasets/${{ env.HF_DATASET_REPO }}"
 
+  run-kaggle-notebook:
+    needs: convert-and-upload
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Setup Kaggle API
         env:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
