@@ -77,7 +77,7 @@ def chunking(model: SaT, sub_text: list[str], number: int = 128) -> list[str]:
     return new_sub_text
 
 
-def device() -> str:
+def get_device() -> str:
     """
     Check if CUDA is available and return appropriate device.
 
