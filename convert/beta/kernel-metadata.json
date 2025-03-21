@@ -1,0 +1,19 @@
+{
+  "id": "nhotin/convert-onnx-to-tensorrt",
+  "title": "Convert ONNX to TensorRT",
+  "code_file": "convert-onnx-to-tensorrt.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "enable_auto_run": true,
+  "competition_sources": [],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "docker_image_pinning_type": "original",
+  "gpu_config": {
+    "gpu_count": 2,
+    "gpu_type": "t4"
+  }
+} 

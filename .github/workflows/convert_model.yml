@@ -56,8 +56,42 @@ jobs:
 
           echo "Model đã được upload thành công lên Dataset: https://huggingface.co/datasets/${{ env.HF_DATASET_REPO }}"
 
-  run-kaggle-notebook:
+  upload-kaggle-notebook:
     needs: Export-ONNX-model-and-upload-to-Hugging-Face
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Kaggle API
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          mkdir -p ~/.kaggle
+          echo "{\"username\":\"$KAGGLE_USERNAME\",\"key\":\"$KAGGLE_KEY\"}" > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+          echo "Kaggle API đã được cấu hình thành công!"
+
+      - name: Install Kaggle CLI
+        run: pip install kaggle
+
+      - name: Upload Notebook to Kaggle
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          # Đẩy notebook lên Kaggle và tạo version mới
+          kaggle kernels push -p convert/beta/convert-onnx-to-tensorrt.ipynb
+          echo "Notebook đã được đẩy lên Kaggle thành công!"
+          
+          # Kiểm tra trạng thái của notebook
+          kaggle kernels status nhotin/convert-onnx-to-tensorrt
+          echo "Version mới của notebook đã được tạo trên Kaggle!"
+
+  run-kaggle-notebook:
+    needs: upload-kaggle-notebook
     runs-on: ubuntu-latest
 
     steps:
