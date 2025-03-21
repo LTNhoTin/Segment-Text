@@ -79,7 +79,7 @@ jobs:
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: |
           # Đẩy notebook lên Kaggle và tạo version mới
-          kaggle kernels push -p convert/beta/convert-onnx-to-tensorrt.ipynb
+          kaggle kernels push -p convert/beta
           echo "Notebook đã được đẩy lên Kaggle thành công!"
           
           # Kiểm tra trạng thái của notebook
