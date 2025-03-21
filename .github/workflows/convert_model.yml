@@ -8,11 +8,9 @@ on:
 jobs:
   Export-ONNX-model-and-upload-to-Hugging-Face:
     runs-on: ubuntu-latest
-
     env:
       HF_DATASET_REPO: nhotin/segment-text  # Repo dataset trên Hugging Face
       MODEL_NAME: sat-12l-sm  # Tên model
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -40,26 +38,24 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}  # Token Hugging Face
         run: |
           pip install huggingface_hub
-
           echo "Đăng nhập vào Hugging Face Hub..."
           huggingface-cli login --token $HF_TOKEN
           
           echo "Kiểm tra và tạo dataset nếu chưa có..."
           python -c "from huggingface_hub import HfApi; HfApi().create_repo('${{ env.HF_DATASET_REPO }}', repo_type='dataset', exist_ok=True)"
-
+          
           echo "Đẩy model lên Hugging Face Dataset..."
           huggingface-cli upload \
             "${{ env.HF_DATASET_REPO }}" \
             "models/${{ env.MODEL_NAME }}/model.onnx" \
             --repo-type dataset \
             --token $HF_TOKEN
-
+          
           echo "Model đã được upload thành công lên Dataset: https://huggingface.co/datasets/${{ env.HF_DATASET_REPO }}"
 
   upload-kaggle-notebook:
     needs: Export-ONNX-model-and-upload-to-Hugging-Face
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -89,38 +85,3 @@ jobs:
           # Kiểm tra trạng thái của notebook
           kaggle kernels status nhotin/convert-onnx-to-tensorrt
           echo "Version mới của notebook đã được tạo trên Kaggle!"
-
-  run-kaggle-notebook:
-    needs: upload-kaggle-notebook
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Setup Kaggle API
-        env:
-          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
-        run: |
-          mkdir -p ~/.kaggle
-          echo "{\"username\":\"$KAGGLE_USERNAME\",\"key\":\"$KAGGLE_KEY\"}" > ~/.kaggle/kaggle.json
-          chmod 600 ~/.kaggle/kaggle.json
-          echo "Kaggle API đã được cấu hình thành công!"
-
-      - name: Install Kaggle CLI
-        run: pip install kaggle
-
-      - name: Run Kaggle Notebook via API
-        env:
-          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-          -u $KAGGLE_USERNAME:$KAGGLE_KEY \
-          https://www.kaggle.com/api/v1/kernels/nhotin/convert-onnx-to-tensorrt/forkAndRun
-
-      - name: Check Kaggle Notebook Status
-        env:
-          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
-        run: |
-          curl -u $KAGGLE_USERNAME:$KAGGLE_KEY \
-          https://www.kaggle.com/api/v1/kernels/status/nhotin/convert-onnx-to-tensorrt
